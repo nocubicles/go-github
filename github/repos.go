@@ -260,6 +260,33 @@ func (s *RepositoriesService) ListByOrg(ctx context.Context, org string, opts *R
 	return repos, resp, nil
 }
 
+// ListLabels lists the repos labels.
+
+func (s *RepositoriesService) ListLabels(ctx context.Context, repo string, opts *ListOptions) ([]*Label, *Response, error) {
+	u := fmt.Sprintf("orgs/%v/repos", repo)
+	u, err := addOptions(u, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// TODO: remove custom Accept headers when APIs fully launch.
+	acceptHeaders := []string{mediaTypeTopicsPreview}
+	req.Header.Set("Accept", strings.Join(acceptHeaders, ", "))
+
+	var labels []*Label
+	resp, err := s.client.Do(ctx, req, &labels)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return labels, resp, nil
+}
+
 // RepositoryListAllOptions specifies the optional parameters to the
 // RepositoriesService.ListAll method.
 type RepositoryListAllOptions struct {
