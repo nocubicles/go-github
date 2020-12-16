@@ -263,7 +263,7 @@ func (s *RepositoriesService) ListByOrg(ctx context.Context, org string, opts *R
 // ListLabels lists the repos labels.
 
 func (s *RepositoriesService) ListLabels(ctx context.Context, orgName string, repoName string, opts *ListOptions) ([]*Label, *Response, error) {
-	u := fmt.Sprintf("orgs/%v/repos", orgName, repoName)
+	u := fmt.Sprintf("repos/%s/%s/labels", orgName, repoName)
 	u, err := addOptions(u, opts)
 	if err != nil {
 		return nil, nil, err
